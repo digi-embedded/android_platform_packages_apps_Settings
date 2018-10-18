@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018, Digi International Inc.
+
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, you can obtain one at http://mozilla.org/MPL/2.0/.
+
+     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+     WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+     ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+     WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+     ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/ethernet_settings_title">
+    <!-- Programmatically will have dynamic summary, but we provide the fallback summary. -->
+    <Preference
+        android:key="eth_config"
+        android:persistent="false"
+        android:icon="@drawable/ic_settings_24dp"
+        android:title="@string/eth_config_title"/>
+    <PreferenceCategory
+        android:key="con_info"
+        android:title="@string/eth_connection_info">
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="con_type"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_con_type"/>
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="ip_address"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_ipaddr"/>
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="netmask_address"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_mask"/>
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="dns1_address"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_dns1"/>
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="dns2_address"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_dns2"/>
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="gateway_address"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_gw"/>
+        <Preference 
+            style="?android:preferenceInformationStyle"
+            android:key="mac_address"
+            android:summary="@string/device_info_default"
+            android:title="@string/eth_mac"/>
+    </PreferenceCategory>
+</PreferenceScreen>

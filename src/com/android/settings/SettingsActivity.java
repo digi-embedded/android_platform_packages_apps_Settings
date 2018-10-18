@@ -61,6 +61,7 @@ import com.android.settings.core.instrumentation.SharedPreferencesLogger;
 import com.android.settings.dashboard.DashboardFeatureProvider;
 import com.android.settings.dashboard.DashboardSummary;
 import com.android.settings.development.DevelopmentSettings;
+import com.android.settings.ethernet.EthernetSettings;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.search.DynamicIndexableContentMonitor;
 import com.android.settings.search.SearchActivity;
@@ -782,6 +783,10 @@ public class SettingsActivity extends SettingsDrawerActivity
         setTileEnabled(new ComponentName(packageName,
                         Settings.DataUsageSummaryActivity.class.getName()),
                 Utils.isBandwidthControlEnabled(), isAdmin);
+
+        setTileEnabled(new ComponentName(packageName,
+                        Settings.EthernetSettingsActivity.class.getName()),
+                pm.hasSystemFeature(PackageManager.FEATURE_ETHERNET), isAdmin);
 
         setTileEnabled(new ComponentName(packageName,
                         Settings.SimSettingsActivity.class.getName()),

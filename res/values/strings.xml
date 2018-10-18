@@ -1665,6 +1665,25 @@
     <!-- Explanation of the Android Beam feature in the Android Beam settings panel. The use of "beam" here is as a verb and not considered trademarked. [CHAR LIMIT=NONE] -->
     <string name="android_beam_explained">When this feature is turned on, you can beam app content to another NFC-capable device by holding the devices close together. For example, you can beam web pages, YouTube videos, contacts, and more.\n\nJust bring the devices together (typically back to back) and then tap your screen. The app determines what gets beamed.</string>
 
+    <!-- Ethernet Strings -->
+    <string name="ethernet_settings">Ethernet Settings</string>
+    <string name="ethernet_settings_title">Ethernet</string>
+    <string name="eth_connection_info">Connection information</string>
+    <string name="eth_config_title">Configure Ethernet device</string>
+    <string name="eth_dev_list">Ethernet Interface</string>
+    <string name="eth_con_type">Connection Type</string>
+    <string name="eth_con_type_dhcp">DHCP</string>
+    <string name="eth_con_type_manual">Static IP</string>
+    <string name="eth_dns1">DNS1 address</string>
+    <string name="eth_dns2">DNS2 address</string>
+    <string name="eth_gw">Gateway address</string>
+    <string name="eth_mac">MAC address</string>
+    <string name="eth_ipaddr">IP address</string>
+    <string name="eth_mask">Netmask</string>
+    <string name="eth_turn_dialog_title">Updating interface status</string>
+    <string name="eth_turn_dialog_message">Please wait...</string>
+    <string name="eth_apply_dialog_title">Applying the new configuration</string>
+
     <!-- Wi-Fi Settings --> <skip />
     <!-- Used in the 1st-level settings screen to turn on Wi-Fi -->
     <string name="wifi_quick_toggle_title">Wi\u2011Fi</string>

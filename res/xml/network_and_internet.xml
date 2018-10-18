@@ -31,6 +31,18 @@
             android:targetClass="Settings$WifiSettingsActivity"/>
     </com.android.settings.widget.MasterSwitchPreference>
 
+    <com.android.settings.widget.MasterSwitchPreference
+        android:fragment="com.android.settings.ethernet.EthernetSettings"
+        android:key="toggle_ethernet"
+        android:title="@string/ethernet_settings_title"
+        android:summary="@string/summary_placeholder"
+        android:icon="@drawable/ic_settings_ethernet"
+        android:order="-30">
+        <intent
+            android:action="android.settings.ETHERNET_SETTINGS"
+            android:targetClass="Settings$EthernetSettingsActivity"/>
+    </com.android.settings.widget.MasterSwitchPreference>
+
     <com.android.settingslib.RestrictedPreference
         android:key="mobile_network_settings"
         android:title="@string/network_settings_title"

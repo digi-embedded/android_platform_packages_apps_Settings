@@ -52,6 +52,7 @@ import com.android.settings.display.AmbientDisplaySettings;
 import com.android.settings.display.ScreenZoomSettings;
 import com.android.settings.dream.DreamSettings;
 import com.android.settings.enterprise.EnterprisePrivacySettings;
+import com.android.settings.ethernet.EthernetSettings;
 import com.android.settings.fuelgauge.BatterySaverSettings;
 import com.android.settings.fuelgauge.PowerUsageAdvanced;
 import com.android.settings.fuelgauge.PowerUsageSummary;
@@ -127,6 +128,7 @@ public final class SearchIndexableResources {
 
     static {
         addIndex(WifiSettings.class, NO_DATA_RES_ID, R.drawable.ic_settings_wireless);
+        addIndex(EthernetSettings.class, NO_DATA_RES_ID, R.drawable.ic_settings_ethernet);
         addIndex(NetworkDashboardFragment.class, NO_DATA_RES_ID, R.drawable.ic_settings_wireless);
         addIndex(ConfigureWifiSettings.class, NO_DATA_RES_ID, R.drawable.ic_settings_wireless);
         addIndex(SavedAccessPointsWifiSettings.class, NO_DATA_RES_ID,
