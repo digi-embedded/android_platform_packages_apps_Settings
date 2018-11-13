@@ -104,6 +104,7 @@
     <uses-permission android:name="android.permission.INSTALL_DYNAMIC_SYSTEM" />
     <uses-permission android:name="android.permission.BIND_CELL_BROADCAST_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.digi.android.permission.FIRMWARE_UPDATE" />
     
     <application android:label="@string/settings_label"
             android:icon="@drawable/ic_launcher_settings"
@@ -3440,6 +3441,14 @@
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                        android:value="com.android.settings.sound.MediaControlsSettings" />
+        </activity>
+
+        <activity android:name=".deviceinfo.FirmwareUpdate"
+                android:theme="@style/Theme.Settings"
+                android:label="@string/select_update_package">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
 
         <!-- This is the longest AndroidManifest.xml ever. -->
