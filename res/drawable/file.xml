@@ -1,0 +1,24 @@
+<!-- Copyright 2019, Digi International Inc.
+
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, you can obtain one at http://mozilla.org/MPL/2.0/.
+
+     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+     WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+     ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+     WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+     ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="36dp"
+    android:width="36dp"
+    android:viewportHeight="224"
+    android:viewportWidth="224"
+    android:tint="?android:attr/colorControlNormal">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M174.596,36.245c-2.087,-2.053 -4.24,-4.173 -6.361,-6.293c-2.154,-2.12 -4.24,-4.274 -6.327,-6.394c-14.74,-15.043 -23.524,-23.558 -32.678,-23.558h-68.923c-18.981,0 -34.462,15.481 -34.462,34.462v155.077c0,18.981 15.481,34.462 34.462,34.462h103.385c18.981,0 34.462,-15.481 34.462,-34.462v-120.615c0,-9.154 -8.514,-17.938 -23.558,-32.678zM180.923,189.538c0,9.524 -7.707,17.231 -17.231,17.231h-103.385c-9.524,0 -17.231,-7.707 -17.231,-17.231v-155.077c0,-9.524 7.707,-17.231 17.231,-17.231l62.798,-0.034c6.226,1.582 6.125,9.221 6.125,16.861v26.25c0,4.745 3.87,8.615 8.615,8.615h25.846c8.582,0 17.231,0.034 17.231,8.615z"/>
+</vector>
