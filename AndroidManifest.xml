@@ -85,6 +85,7 @@
     <uses-permission android:name="android.permission.MANAGE_APP_OPS_RESTRICTIONS"/>
     <uses-permission android:name="android.permission.NETWORK_SETTINGS" />
     <uses-permission android:name="android.permission.HIDE_NON_SYSTEM_OVERLAY_WINDOWS"/>
+    <uses-permission android:name="com.digi.android.permission.FIRMWARE_UPDATE" />
 
     <application android:label="@string/settings_label"
             android:icon="@drawable/ic_launcher_settings"
@@ -97,6 +98,10 @@
             android:usesCleartextTraffic="true"
             android:defaultToDeviceProtectedStorage="true"
             android:directBootAware="true">
+
+        <uses-library
+            android:name="com.digi.android"
+            android:required="true"/>
 
         <!-- Settings -->
 
@@ -3240,6 +3245,14 @@
                 <action android:name="android.settings.REQUEST_SET_AUTOFILL_SERVICE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="package" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".deviceinfo.FirmwareUpdate"
+                android:theme="@style/Theme.Settings"
+                android:label="@string/select_update_package">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 

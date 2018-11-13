@@ -32,7 +32,8 @@ LOCAL_JAVA_LIBRARIES := \
     bouncycastle \
     core-oj \
     telephony-common \
-    ims-common
+    ims-common \
+    com.digi.android.stubs
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
     jsr305 \

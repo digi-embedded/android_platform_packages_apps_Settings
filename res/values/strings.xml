@@ -7357,6 +7357,14 @@
    <string name="imei_information_summary">IMEI relative information</string>
    <string name="slot_number">(Slot<xliff:g id="slot_num">%1$d</xliff:g>)</string>
 
+   <!-- Firmware Update Texts -->
+   <string name="firmware_update_title">Update firmware</string>
+   <string name="installing_firmware_title">Installing new firmware</string>
+   <string name="select_update_package">Select the update package</string>
+   <string name="copying_update_package">Copying update package...</string>
+   <string name="verifying_update_package">Verifying update package: %d%</string>
+   <string name="confirm_firmware_update">Do you want to update the firmware using this file?\n\n%s</string>
+
    <!-- New strings needed for App Info 2 -->
    <!-- Preference label for app default launch settings [CHAR LIMIT=35]-->
    <string name="launch_by_default">Open by default</string>
