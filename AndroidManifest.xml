@@ -3281,6 +3281,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".deviceinfo.FirmwareUpdate"
+                android:theme="@style/Theme.Settings"
+                android:label="@string/select_update_package">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
         <!-- This is the longest AndroidManifest.xml ever. -->
     </application>
 </manifest>
