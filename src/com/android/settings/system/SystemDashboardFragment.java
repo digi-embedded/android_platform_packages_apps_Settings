@@ -26,12 +26,16 @@ import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
+import com.android.settings.cloudconnector.CloudConnectorPreferenceController;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.search.Indexable;
 import com.android.settingslib.search.SearchIndexable;
+import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.core.lifecycle.Lifecycle;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,6 +88,19 @@ public class SystemDashboardFragment extends DashboardFragment {
     @Override
     public int getHelpResource() {
         return R.string.help_url_system_dashboard;
+    }
+
+    @Override
+    protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
+        Lifecycle lifecycle = getSettingsLifecycle();
+        final CloudConnectorPreferenceController ccPreferenceController =
+                new CloudConnectorPreferenceController(context, mMetricsFeatureProvider);
+        if (lifecycle != null)
+            lifecycle.addObserver(ccPreferenceController);
+
+        final List<AbstractPreferenceController> controllers = new ArrayList<>();
+        controllers.add(ccPreferenceController);
+        return controllers;
     }
 
     private int getVisiblePreferenceCount(PreferenceGroup group) {
