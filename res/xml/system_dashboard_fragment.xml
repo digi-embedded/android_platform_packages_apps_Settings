@@ -28,6 +28,14 @@
         <intent android:action="android.settings.BACKUP_AND_RESET_SETTINGS" />
     </Preference>
 
+    <Preference
+        android:key="cloud_connector_settings"
+        android:title="@string/cc_settings_title"
+        android:summary="@string/summary_placeholder"
+        android:icon="@drawable/ic_settings_cloud_connector"
+        android:order="-29"
+        android:fragment="com.android.settings.cloudconnector.CloudConnectorSettings"/>
+
     <!-- System updates -->
     <Preference
         android:key="system_update_settings"

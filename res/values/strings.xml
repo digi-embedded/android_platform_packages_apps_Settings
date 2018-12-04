@@ -3993,6 +3993,35 @@
         features of your phone may stop working correctly until you power it off
         and then on again.</string>
 
+    <!-- Device Cloud Settings --> <skip />
+    <string name="cc_settings_title">Remote Manager</string>
+    <string name="cc_device_info">Device Information</string>
+    <string name="cc_enter_value">Enter a value</string>
+    <string name="cc_device_id">Device ID</string>
+    <string name="cc_vendor_id">Vendor ID</string>
+    <string name="cc_device_name">Device name</string>
+    <string name="cc_device_description">Device description</string>
+    <string name="cc_contact_information">Contact information</string>
+    <string name="cc_connection_settings">Connection Settings</string>
+    <string name="cc_connection_url">Connection URL</string>
+    <string name="cc_autoconnect">Enable auto-connect</string>
+    <string name="cc_autoconnect_summary">Automatically attempt to connect to Remote Manager when booting or if the connection is lost.</string>
+    <string name="cc_secure_connection">Enable secure connection</string>
+    <string name="cc_secure_connection_summary">Changes applied to this setting only take effect after a reconnection.</string>
+    <string name="cc_messaging_compression">Enable messaging compression</string>
+    <string name="cc_messaging_compression_summary">Changes applied to this setting only take effect after a reconnection.</string>
+    <string name="cc_connection_on_dialog_title">Connecting to Remote Manager</string>
+    <string name="cc_connection_off_dialog_title">Disconnecting from Remote Manager</string>
+    <string name="cc_connection_dialog_message">Please wait...</string>
+    <string name="cc_system_monitor_settings">System Monitor Settings</string>
+    <string name="cc_enable_system_monitor">Enable system monitor</string>
+    <string name="cc_system_monitor_sample_rate">Sample rate (seconds)</string>
+    <string name="cc_system_monitor_advanced">System monitor advanced settings</string>
+    <string name="cc_system_monitor_upload_samples_size">Number of samples to collect before uploading</string>
+    <string name="cc_system_monitor_memory_monitoring">Monitor system memory</string>
+    <string name="cc_system_monitor_cpu_load_monitoring">Monitor CPU load</string>
+    <string name="cc_system_monitor_cpu_temperature_monitoring">Monitor CPU temperature</string>
+
     <!-- Languages Settings --> <skip />
     <!-- Title of Language, input & gestures setting on main settings screen. -->
     <string name="language_input_gesture_title">Languages, input &amp; gestures</string>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018, Digi International Inc.
+
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, you can obtain one at http://mozilla.org/MPL/2.0/.
+
+     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+     WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+     ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+     WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+     ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/cc_settings_title">
+    <!-- Programmatically will have dynamic summary, but we provide the fallback summary. -->
+    <PreferenceCategory
+        android:key="device_info"
+        android:title="@string/cc_device_info">
+        <Preference
+            style="?android:preferenceInformationStyle"
+            android:key="device_id"
+            android:title="@string/cc_device_id"
+            android:summary="@string/device_info_default"/>
+        <EditTextPreference
+            android:key="vendor_id"
+            android:title="@string/cc_vendor_id"
+            android:dialogTitle="@string/cc_enter_value"
+            android:inputType="textCapCharacters"
+            android:maxLength="10"
+            android:digits="0123456789ABCDEFxX"/>
+        <EditTextPreference
+            android:key="device_type"
+            android:title="@string/cc_device_name"
+            android:dialogTitle="@string/cc_enter_value"
+            android:maxLength="255"/>
+        <EditTextPreference
+            android:key="description"
+            android:title="@string/cc_device_description"
+            android:dialogTitle="@string/cc_enter_value"
+            android:maxLength="63"/>
+        <EditTextPreference
+            android:key="contact"
+            android:title="@string/cc_contact_information"
+            android:dialogTitle="@string/cc_enter_value"
+            android:maxLength="63"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="connection_settings"
+        android:title="@string/cc_connection_settings">
+        <EditTextPreference
+            android:key="url"
+            android:title="@string/cc_connection_url"
+            android:dialogTitle="@string/cc_enter_value"
+            android:inputType="textWebEmailAddress"/>
+        <SwitchPreference
+            android:key="enable_auto_connect"
+            android:title="@string/cc_autoconnect"
+            android:summary="@string/cc_autoconnect_summary"/>
+        <SwitchPreference
+            android:key="enable_secure_connection"
+            android:title="@string/cc_secure_connection"
+            android:summary="@string/cc_secure_connection_summary"/>
+        <SwitchPreference
+            android:key="enable_compression"
+            android:title="@string/cc_messaging_compression"
+            android:summary="@string/cc_messaging_compression_summary"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="system_monitor_settings"
+        android:title="@string/cc_system_monitor_settings">
+        <SwitchPreference
+            android:key="enable_system_monitor"
+            android:title="@string/cc_enable_system_monitor"/>
+        <EditTextPreference
+            android:key="system_monitor_sample_rate"
+            android:title="@string/cc_system_monitor_sample_rate"
+            android:inputType="number"
+            android:digits="0123456789"/>
+        <PreferenceScreen
+            android:title="@string/cc_system_monitor_advanced">
+            <EditTextPreference
+                android:key="system_monitor_upload_samples_size"
+                android:title="@string/cc_system_monitor_upload_samples_size"
+                android:maxLength="3"
+                android:inputType="number"
+                android:digits="0123456789"/>
+            <SwitchPreference
+                android:key="system_monitor_enable_memory_sampling"
+                android:title="@string/cc_system_monitor_memory_monitoring"/>
+            <SwitchPreference
+                android:key="system_monitor_enable_cpu_load_sampling"
+                android:title="@string/cc_system_monitor_cpu_load_monitoring"/>
+            <SwitchPreference
+                android:key="system_monitor_enable_cpu_temperature_sampling"
+                android:title="@string/cc_system_monitor_cpu_temperature_monitoring"/>
+        </PreferenceScreen>
+    </PreferenceCategory>
+</PreferenceScreen>

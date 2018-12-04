@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2018 Digi International Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +60,7 @@ import com.android.settings.applications.WriteSettingsDetails;
 import com.android.settings.applications.assist.ManageAssist;
 import com.android.settings.bluetooth.BluetoothDeviceDetailsFragment;
 import com.android.settings.bluetooth.BluetoothSettings;
+import com.android.settings.cloudconnector.CloudConnectorSettings;
 import com.android.settings.connecteddevice.ConnectedDeviceDashboardFragment;
 import com.android.settings.dashboard.SupportFragment;
 import com.android.settings.datausage.DataUsageSummary;
@@ -177,6 +179,7 @@ public class SettingsGateway {
             WifiDisplaySettings.class.getName(),
             PowerUsageSummary.class.getName(),
             AccountSyncSettings.class.getName(),
+            CloudConnectorSettings.class.getName(),
             AssistGestureSettings.class.getName(),
             SwipeToNotificationSettings.class.getName(),
             DoubleTapPowerSettings.class.getName(),
