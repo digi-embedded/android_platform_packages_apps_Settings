@@ -714,6 +714,11 @@ public class SettingsActivity extends SettingsDrawerActivity
                 || somethingChanged;
 
         somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
+                        Settings.CloudConnectorSettingsActivity.class.getName()),
+                true, isAdmin)
+                || somethingChanged;
+
+        somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
                         Settings.WifiDisplaySettingsActivity.class.getName()),
                 WifiDisplaySettings.isAvailable(this), isAdmin)
                 || somethingChanged;

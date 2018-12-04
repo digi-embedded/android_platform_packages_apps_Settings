@@ -59,6 +59,11 @@
     surface in search results or not.-->
     <bool name="config_show_ethernet_settings">true</bool>
 
+    <!-- Whether Remote Manager settings should be shown or not.
+    This also controls whether Remote Manager related sub-settings (e.g. Remote Manager preferences) will
+    surface in search results or not.-->
+    <bool name="config_show_cc_settings">true</bool>
+
     <!-- Whether toggle_airplane is available or not. -->
     <bool name="config_show_toggle_airplane">true</bool>
 

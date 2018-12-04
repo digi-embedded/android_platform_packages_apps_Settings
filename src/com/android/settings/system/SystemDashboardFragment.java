@@ -25,10 +25,14 @@ import android.support.v7.preference.PreferenceScreen;
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.backup.BackupSettingsActivityPreferenceController;
+import com.android.settings.cloudconnector.CloudConnectorPreferenceController;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.search.Indexable;
+import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.core.lifecycle.Lifecycle;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,6 +73,19 @@ public class SystemDashboardFragment extends DashboardFragment {
         return R.string.help_url_system_dashboard;
     }
 
+    @Override
+    protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
+        Lifecycle lifecycle = getLifecycle();
+        final CloudConnectorPreferenceController ccPreferenceController =
+                new CloudConnectorPreferenceController(context, mMetricsFeatureProvider);
+        if (lifecycle != null)
+            lifecycle.addObserver(ccPreferenceController);
+
+        final List<AbstractPreferenceController> controllers = new ArrayList<>();
+        controllers.add(ccPreferenceController);
+        return controllers;
+    }
+
     private int getVisiblePreferenceCount(PreferenceGroup group) {
         int visibleCount = 0;
         for (int i = 0; i < group.getPreferenceCount(); i++) {
@@ -101,6 +118,7 @@ public class SystemDashboardFragment extends DashboardFragment {
                     keys.add((new BackupSettingsActivityPreferenceController(
                             context).getPreferenceKey()));
                     keys.add(KEY_RESET);
+                    keys.add(CloudConnectorPreferenceController.KEY_TOGGLE_CLOUD_CONNECTOR);
                     return keys;
                 }
             };
