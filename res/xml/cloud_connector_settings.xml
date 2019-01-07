@@ -80,23 +80,20 @@
             android:title="@string/cc_system_monitor_sample_rate"
             android:inputType="number"
             android:digits="0123456789"/>
-        <PreferenceScreen
-            android:title="@string/cc_system_monitor_advanced">
-            <EditTextPreference
-                android:key="system_monitor_upload_samples_size"
-                android:title="@string/cc_system_monitor_upload_samples_size"
-                android:maxLength="3"
-                android:inputType="number"
-                android:digits="0123456789"/>
-            <SwitchPreference
-                android:key="system_monitor_enable_memory_sampling"
-                android:title="@string/cc_system_monitor_memory_monitoring"/>
-            <SwitchPreference
-                android:key="system_monitor_enable_cpu_load_sampling"
-                android:title="@string/cc_system_monitor_cpu_load_monitoring"/>
-            <SwitchPreference
-                android:key="system_monitor_enable_cpu_temperature_sampling"
-                android:title="@string/cc_system_monitor_cpu_temperature_monitoring"/>
-        </PreferenceScreen>
+        <EditTextPreference
+            android:key="system_monitor_upload_samples_size"
+            android:title="@string/cc_system_monitor_upload_samples_size"
+            android:maxLength="3"
+            android:inputType="number"
+            android:digits="0123456789"/>
+        <SwitchPreference
+            android:key="system_monitor_enable_memory_sampling"
+            android:title="@string/cc_system_monitor_memory_monitoring"/>
+        <SwitchPreference
+            android:key="system_monitor_enable_cpu_load_sampling"
+            android:title="@string/cc_system_monitor_cpu_load_monitoring"/>
+        <SwitchPreference
+            android:key="system_monitor_enable_cpu_temperature_sampling"
+            android:title="@string/cc_system_monitor_cpu_temperature_monitoring"/>
     </PreferenceCategory>
 </PreferenceScreen>

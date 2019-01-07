@@ -3994,6 +3994,7 @@
         and then on again.</string>
 
     <!-- Device Cloud Settings --> <skip />
+    <string name="cc_settings">Remote Manager</string>
     <string name="cc_settings_title">Remote Manager</string>
     <string name="cc_device_info">Device Information</string>
     <string name="cc_enter_value">Enter a value</string>

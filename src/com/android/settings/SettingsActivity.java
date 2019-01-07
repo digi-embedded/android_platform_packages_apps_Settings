@@ -55,6 +55,7 @@ import android.widget.Toolbar;
 import com.android.internal.util.ArrayUtils;
 import com.android.settings.Settings.WifiSettingsActivity;
 import com.android.settings.backup.BackupSettingsActivity;
+import com.android.settings.cloudconnector.CloudConnectorSettings;
 import com.android.settings.core.gateway.SettingsGateway;
 import com.android.settings.core.instrumentation.MetricsFeatureProvider;
 import com.android.settings.core.instrumentation.SharedPreferencesLogger;
@@ -833,6 +834,10 @@ public class SettingsActivity extends SettingsDrawerActivity
         // Enable/disable backup settings depending on whether the user is admin.
         setTileEnabled(new ComponentName(packageName,
                         BackupSettingsActivity.class.getName()), true, isAdmin);
+
+        setTileEnabled(new ComponentName(packageName,
+                        Settings.CloudConnectorSettingsActivity.class.getName()),
+                true, isAdmin);
 
         setTileEnabled(new ComponentName(packageName,
                         Settings.WifiDisplaySettingsActivity.class.getName()),

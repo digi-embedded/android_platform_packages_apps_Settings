@@ -1,9 +1,9 @@
 /*
  * Copyright 2018, Digi International Inc.
  *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
@@ -18,34 +18,40 @@ package com.android.settings.cloudconnector;
 
 import java.util.regex.Pattern;
 
+import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settings.R;
 import com.android.settings.SettingsActivity;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.widget.SwitchBar;
 
 import android.app.ProgressDialog;
-import android.cloudconnector.CloudConnectorEventListenerImpl;
 import android.cloudconnector.CloudConnectorHandler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.SwitchPreference;
+import android.support.v14.preference.SwitchPreference;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.digi.android.cloudconnector.CloudConnectorManager;
+import com.digi.android.cloudconnector.CloudConnectorPreferencesManager;
+import com.digi.android.cloudconnector.ICloudConnectorEventListener;
 
 /**
  * Main fragment of the Cloud Connector settings preference page.
  */
 public class CloudConnectorSettings extends SettingsPreferenceFragment
-        implements SwitchBar.OnSwitchChangeListener, OnSharedPreferenceChangeListener, CloudConnectorEventListenerImpl {
+        implements SwitchBar.OnSwitchChangeListener, ICloudConnectorEventListener {
 
     // Constants.
+    private static final String TAG = "CloudConnectorSetting";
+
+    private final static String SHARED_PREFERENCES_NAME = "cloud_connector_settings";
     private final static String PREF_DEVICE_ID = "device_id";
     private final static String PREF_VENDOR_ID = "vendor_id";
     private final static String PREF_DEVICE_NAME = "device_type";
@@ -61,13 +67,6 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
     private final static String PREF_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING = "system_monitor_enable_memory_sampling";
     private final static String PREF_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING = "system_monitor_enable_cpu_load_sampling";
     private final static String PREF_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING = "system_monitor_enable_cpu_temperature_sampling";
-
-    private final static boolean DEFAULT_ENABLE_SYSTEM_MONITOR = false;
-    private final static int DEFAULT_SYSTEM_MONITOR_SAMPLE_RATE = 10;
-    private final static int DEFAULT_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE = 6;
-    private final static boolean DEFAULT_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING = true;
-    private final static boolean DEFAULT_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING = true;
-    private final static boolean DEFAULT_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING = true;
 
     private final static String VENDOR_ID_PATTERN = "0[xX][0-9a-fA-F]{8}";
     private final static String URL_PATTERN = ".+";
@@ -90,8 +89,16 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
     private EditTextPreference urlText;
     private EditTextPreference systemMonitorSampleRateText;
     private EditTextPreference systemMonitorUploadSamplesSizeText;
+    private SwitchPreference enableAutoConnectSwitch;
+    private SwitchPreference enableSecureConnectionSwitch;
+    private SwitchPreference enableCompressionSwitch;
+    private SwitchPreference systemMonitorSwitch;
+    private SwitchPreference systemMonitorMemorySwitch;
+    private SwitchPreference systemMonitorCPULoadSwitch;
+    private SwitchPreference systemMonitorCPUTempSwitch;
 
-    private CloudConnectorHandler connector;
+    private CloudConnectorManager connector;
+    private CloudConnectorPreferencesManager ccPrefsManager;
 
     private ProgressDialog dialog;
 
@@ -100,44 +107,93 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
     private OnPreferenceChangeListener prefChangeListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            boolean valid = false;
+            boolean valid = true;
             switch (preference.getKey()) {
+            case PREF_DEVICE_ID:
+                break;
             case PREF_VENDOR_ID:
                 valid = Pattern.matches(VENDOR_ID_PATTERN, (String) newValue);
-                if (!valid)
+                if (!valid) {
                     Toast.makeText(context, ERROR_INVALID_VENDOR_ID, Toast.LENGTH_LONG).show();
-                return valid;
+                    return false;
+                }
+                ccPrefsManager.setVendorID((String) newValue);
+                break;
             case PREF_DEVICE_NAME:
                 valid = Pattern.matches(DEVICE_NAME_PATTERN , (String) newValue);
-                if (!valid)
+                if (!valid) {
                     Toast.makeText(context, ERROR_INVALID_DEVICE_NAME, Toast.LENGTH_LONG).show();
-                return valid;
+                    return false;
+                }
+                ccPrefsManager.setDeviceName((String) newValue);
+                break;
+            case PREF_DESCRIPTION:
+                ccPrefsManager.setDeviceDescription((String) newValue);
+                break;
+            case PREF_CONTACT:
+                ccPrefsManager.setDeviceContactInformation((String) newValue);
+                break;
             case PREF_URL:
                 valid = Pattern.matches(URL_PATTERN, (String) newValue);
-                if (!valid)
+                if (!valid) {
                     Toast.makeText(context, ERROR_INVALID_URL, Toast.LENGTH_LONG).show();
-                return valid;
+                    return false;
+                }
+                ccPrefsManager.setURL((String) newValue);
+                break;
+            case PREF_ENABLE_AUTO_CONNECT:
+                ccPrefsManager.setAutoConnectEnabled(((Boolean) newValue).booleanValue());
+                break;
+            case PREF_ENABLE_SECURE_CONNECTION:
+                ccPrefsManager.setSecureConnectionEnabled(((Boolean) newValue).booleanValue());
+                break;
+            case PREF_ENABLE_COMPRESSION:
+                ccPrefsManager.setCompressionEnabled(((Boolean) newValue).booleanValue());
+                break;
+            case PREF_ENABLE_SYSTEM_MONITOR:
+                ccPrefsManager.enableSystemMonitor(((Boolean) newValue).booleanValue());
+                break;
             case PREF_SYSTEM_MONITOR_SAMPLE_RATE:
                 try {
-                    int sampleRate = Integer.valueOf((String) newValue);
-                    if (sampleRate > 0)
-                        return true;
+                    int sampleRate = Integer.parseInt((String) newValue);
+                    if (sampleRate > 0) {
+                        ccPrefsManager.setSystemMonitorSampleRate(sampleRate);
+                        break;
+                    }
                 } catch (Exception e) { }
                 Toast.makeText(context, CloudConnectorHandler.ERROR_INVALID_SYSTEM_MONITOR_SAMPLE_RATE, Toast.LENGTH_LONG).show();
-                return valid;
+                return false;
             case PREF_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE:
                 try {
-                    int uploadSize = Integer.valueOf((String) newValue);
-                    if (uploadSize > 0 && uploadSize <= CloudConnectorHandler.MAXIMUM_UPLOAD_SAMPLES_SIZE)
-                        return true;
+                    int uploadSize = Integer.parseInt((String) newValue);
+                    if (uploadSize > 0 && uploadSize <= CloudConnectorPreferencesManager.MAXIMUM_UPLOAD_SAMPLES_SIZE) {
+                        ccPrefsManager.setSystemMonitorUploadSamplesSize(uploadSize);
+                        break;
+                    }
                 } catch (Exception e) { }
                 Toast.makeText(context, CloudConnectorHandler.ERROR_INVALID_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE, Toast.LENGTH_LONG).show();
-                return valid;
+                return false;
+            case PREF_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING:
+                ccPrefsManager.enableSystemMonitorMemorySampling(((Boolean) newValue).booleanValue());
+                break;
+            case PREF_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING:
+                ccPrefsManager.enableSystemMonitorCPULoadSampling(((Boolean) newValue).booleanValue());
+                break;
+            case PREF_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING:
+                ccPrefsManager.enableSystemMonitorCPUTemperatureSampling(((Boolean) newValue).booleanValue());
+                break;
             default:
-                return true;
+                break;
             }
+            updateUI();
+            return valid;
         }
     };
+
+    @Override
+    public int getMetricsCategory() {
+        return MetricsEvent.CLOUD_CONNECTOR;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -150,13 +206,29 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
         nameText = (EditTextPreference) findPreference(PREF_DEVICE_NAME);
         nameText.setOnPreferenceChangeListener(prefChangeListener);
         descText = (EditTextPreference) findPreference(PREF_DESCRIPTION);
+        descText.setOnPreferenceChangeListener(prefChangeListener);
         contactText = (EditTextPreference) findPreference(PREF_CONTACT);
+        contactText.setOnPreferenceChangeListener(prefChangeListener);
         urlText = (EditTextPreference) findPreference(PREF_URL);
         urlText.setOnPreferenceChangeListener(prefChangeListener);
+        enableAutoConnectSwitch = (SwitchPreference) findPreference(PREF_ENABLE_AUTO_CONNECT);
+        enableAutoConnectSwitch.setOnPreferenceChangeListener(prefChangeListener);
+        enableSecureConnectionSwitch = (SwitchPreference) findPreference(PREF_ENABLE_SECURE_CONNECTION);
+        enableSecureConnectionSwitch.setOnPreferenceChangeListener(prefChangeListener);
+        enableCompressionSwitch = (SwitchPreference) findPreference(PREF_ENABLE_COMPRESSION);
+        enableCompressionSwitch.setOnPreferenceChangeListener(prefChangeListener);
         systemMonitorSampleRateText = (EditTextPreference) findPreference(PREF_SYSTEM_MONITOR_SAMPLE_RATE);
         systemMonitorSampleRateText.setOnPreferenceChangeListener(prefChangeListener);
         systemMonitorUploadSamplesSizeText = (EditTextPreference) findPreference(PREF_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE);
         systemMonitorUploadSamplesSizeText.setOnPreferenceChangeListener(prefChangeListener);
+        systemMonitorSwitch = (SwitchPreference) findPreference(PREF_ENABLE_SYSTEM_MONITOR);
+        systemMonitorSwitch.setOnPreferenceChangeListener(prefChangeListener);
+        systemMonitorMemorySwitch = (SwitchPreference) findPreference(PREF_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING);
+        systemMonitorMemorySwitch.setOnPreferenceChangeListener(prefChangeListener);
+        systemMonitorCPULoadSwitch = (SwitchPreference) findPreference(PREF_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING);
+        systemMonitorCPULoadSwitch.setOnPreferenceChangeListener(prefChangeListener);
+        systemMonitorCPUTempSwitch = (SwitchPreference) findPreference(PREF_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING);
+        systemMonitorCPUTempSwitch.setOnPreferenceChangeListener(prefChangeListener);
 
         switchBar.show();
     }
@@ -174,7 +246,8 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
         addPreferencesFromResource(R.xml.cloud_connector_settings);
 
         context = getActivity();
-        connector = (CloudConnectorHandler) context.getSystemService(Context.CLOUD_CONNECTOR_SERVICE);
+        connector = new CloudConnectorManager(context);
+        ccPrefsManager = connector.getPreferencesManager();
 
         dialog = new ProgressDialog(context);
         dialog.setMessage(context.getString(R.string.cc_connection_dialog_message));
@@ -189,7 +262,6 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
         switchCc.setChecked(connector.isConnected());
         // Register listeners.
         switchBar.addOnSwitchChangeListener(this);
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         connector.registerEventListener(this);
         // Update values.
         new Thread(new Runnable() {
@@ -205,12 +277,11 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
         super.onPause();
         // Unregister listeners.
         switchBar.removeOnSwitchChangeListener(this);
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         connector.unregisterEventListener(this);
     }
 
     @Override
-    public void onSwitchChanged(Switch switchView, boolean isChecked) {
+    public void onSwitchChanged(Switch switchView, final boolean isChecked) {
         // Show the progress dialog.
         dialog.setTitle(context.getString(
                 isChecked ? R.string.cc_connection_on_dialog_title : R.string.cc_connection_off_dialog_title));
@@ -223,66 +294,24 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
     }
 
     @Override
-    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                switch (key) {
-                case PREF_DEVICE_ID:
-                case PREF_VENDOR_ID:
-                case PREF_DEVICE_NAME:
-                case PREF_DESCRIPTION:
-                case PREF_CONTACT:
-                case PREF_URL:
-                    connector.writePreference(key, sharedPreferences.getString(key, ""));
-                    break;
-                case PREF_ENABLE_AUTO_CONNECT:
-                case PREF_ENABLE_SECURE_CONNECTION:
-                case PREF_ENABLE_COMPRESSION:
-                    connector.writePreference(key, String.valueOf(sharedPreferences.getBoolean(key, false)));
-                    break;
-                case PREF_ENABLE_SYSTEM_MONITOR:
-                    connector.enableSystemMonitor(sharedPreferences.getBoolean(key, DEFAULT_ENABLE_SYSTEM_MONITOR));
-                    break;
-                case PREF_SYSTEM_MONITOR_SAMPLE_RATE:
-                    connector.setSystemMonitorSampleRate(Integer.valueOf(sharedPreferences.getString(key, "" + DEFAULT_SYSTEM_MONITOR_SAMPLE_RATE)));
-                    break;
-                case PREF_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE:
-                    connector.setSystemMonitorUploadSamplesSize(Integer.valueOf(sharedPreferences.getString(key, "" + DEFAULT_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE)));
-                    break;
-                case PREF_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING:
-                    connector.enableSystemMonitorMemorySampling(sharedPreferences.getBoolean(key, DEFAULT_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING));
-                    break;
-                case PREF_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING:
-                    connector.enableSystemMonitorCPULoadSampling(sharedPreferences.getBoolean(key, DEFAULT_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING));
-                    break;
-                case PREF_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING:
-                    connector.enableSystemMonitorCPUTemperatureSampling(sharedPreferences.getBoolean(key, DEFAULT_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING));
-                    break;
-                }
-                updateUI();
-            }
-        }).start();
-    }
-
-    @Override
     public void connected() {
         dialog.dismiss();
         Toast.makeText(context, "Connected to Remote Manager", Toast.LENGTH_LONG).show();
-        updateSwitchCc(true);
+        updateInfo(true);
     }
 
     @Override
     public void disconnected() {
         dialog.dismiss();
         Toast.makeText(context, "Disconnected from Remote Manager", Toast.LENGTH_LONG).show();
-        updateSwitchCc(false);
+        updateInfo(false);
     }
 
     @Override
     public void connectionError(String errorMessage) {
         dialog.dismiss();
         Toast.makeText(context, "Error connecting to Remote Manager: " + errorMessage, Toast.LENGTH_LONG).show();
+        updateInfo(false);
     }
 
     @Override
@@ -296,7 +325,7 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
     }
 
     /**
-     * Update the Device Cloud connection switch state to the given one.
+     * Update the Remote Manager connection switch state to the given one.
      *
      * <p>If the current state of the switch is the same provided, this method
      * does nothing.</p>
@@ -316,33 +345,45 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
     }
 
     /**
+     * Update the Remote Manager connection state and configuration.
+     *
+     * @param connected {@code true} to update to connected state, {@code false}
+     *                  otherwise.
+     */
+    private void updateInfo(boolean connected) {
+        updateSwitchCc(connected);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                updateUI();
+            }
+        }).start();
+    }
+
+    /**
      * Update the values of Cloud Connector.
      */
     private void updateUI() {
-        final String deviceId = connector.getDeviceID();
-        final String vendorId = connector.readPreference(PREF_VENDOR_ID);
-        final String deviceName = connector.readPreference(PREF_DEVICE_NAME);
-        final String description = connector.readPreference(PREF_DESCRIPTION);
-        final String contact = connector.readPreference(PREF_CONTACT);
-        final String url = connector.readPreference(PREF_URL);
-        final String systemMonitorSampleRate = "" + connector.getSystemMonitorSampleRate();
-        final String systemMonitorUploadSamplesSize = "" + connector.getSystemMonitorUploadSamplesSize();
-        final boolean autoConnect = Boolean.parseBoolean(connector.readPreference(PREF_ENABLE_AUTO_CONNECT));
-        final boolean secureConnection = Boolean.parseBoolean(connector.readPreference(PREF_ENABLE_SECURE_CONNECTION));
-        final boolean compression = Boolean.parseBoolean(connector.readPreference(PREF_ENABLE_COMPRESSION));
-        final boolean enableSystemMonitor = connector.isSystemMonitorEnabled();
-        final boolean systemMonitorEnableMemorySampling = connector.isSystemMonitorMemorySamplingEnabled();
-        final boolean systemMonitorEnableCPULoadSampling = connector.isSystemMonitorCPULoadSamplingEnabled();
-        final boolean systemMonitorEnableCPUTemperatureSampling = connector.isSystemMonitorCPUTemperatureSamplingEnabled();
+        final String deviceId = ccPrefsManager.getDeviceID();
+        final String vendorId = ccPrefsManager.getVendorID();
+        final String deviceName = ccPrefsManager.getDeviceName();
+        final String description = ccPrefsManager.getDeviceDescription();
+        final String contact = ccPrefsManager.getDeviceContactInformation();
+        final String url = ccPrefsManager.getURL();
+        final String systemMonitorSampleRate = "" + ccPrefsManager.getSystemMonitorSampleRate();
+        final String systemMonitorUploadSamplesSize = "" + ccPrefsManager.getSystemMonitorUploadSamplesSize();
+        final boolean autoConnect = ccPrefsManager.isAutoConnectEnabled();
+        final boolean secureConnection = ccPrefsManager.isSecureConnectionEnabled();
+        final boolean compression = ccPrefsManager.isCompressionEnabled();
+        final boolean enableSystemMonitor = ccPrefsManager.isSystemMonitorEnabled();
+        final boolean systemMonitorEnableMemorySampling = ccPrefsManager.isSystemMonitorMemorySamplingEnabled();
+        final boolean systemMonitorEnableCPULoadSampling = ccPrefsManager.isSystemMonitorCPULoadSamplingEnabled();
+        final boolean systemMonitorEnableCPUTemperatureSampling = ccPrefsManager.isSystemMonitorCPUTemperatureSamplingEnabled();
 
         handler.post(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences prefs = getPreferenceScreen().getSharedPreferences();
-
-                // Unregister the preference change listener to not save again
-                // the value of the checkbox preferences.
-                prefs.unregisterOnSharedPreferenceChangeListener(CloudConnectorSettings.this);
+                SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
                 Editor editor = prefs.edit();
 
@@ -379,17 +420,28 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
 
                 editor.commit();
 
-                ((SwitchPreference) findPreference(PREF_ENABLE_AUTO_CONNECT)).setChecked(autoConnect);
-                ((SwitchPreference) findPreference(PREF_ENABLE_SECURE_CONNECTION)).setChecked(secureConnection);
-                ((SwitchPreference) findPreference(PREF_ENABLE_COMPRESSION)).setChecked(compression);
-                ((SwitchPreference) findPreference(PREF_ENABLE_SYSTEM_MONITOR)).setChecked(enableSystemMonitor);
-                ((SwitchPreference) findPreference(PREF_SYSTEM_MONITOR_ENABLE_MEMORY_SAMPLING)).setChecked(systemMonitorEnableMemorySampling);
-                ((SwitchPreference) findPreference(PREF_SYSTEM_MONITOR_ENABLE_CPU_LOAD_SAMPLING)).setChecked(systemMonitorEnableCPULoadSampling);
-                ((SwitchPreference) findPreference(PREF_SYSTEM_MONITOR_ENABLE_CPU_TEMPERATURE_SAMPLING)).setChecked(systemMonitorEnableCPUTemperatureSampling);
-
-                // Register again the preference change listener.
-                prefs.registerOnSharedPreferenceChangeListener(CloudConnectorSettings.this);
+                enableAutoConnectSwitch.setChecked(autoConnect);
+                enableSecureConnectionSwitch.setChecked(secureConnection);
+                enableCompressionSwitch.setChecked(compression);
+                systemMonitorSwitch.setChecked(enableSystemMonitor);
+                systemMonitorSwitch.setSummary(context.getString(enableSystemMonitor ? R.string.switch_on_text : R.string.switch_off_text));
+                systemMonitorMemorySwitch.setChecked(systemMonitorEnableMemorySampling);
+                systemMonitorMemorySwitch.setSummary(context.getString(systemMonitorEnableMemorySampling ? R.string.switch_on_text : R.string.switch_off_text));
+                systemMonitorCPULoadSwitch.setChecked(systemMonitorEnableCPULoadSampling);
+                systemMonitorCPULoadSwitch.setSummary(context.getString(systemMonitorEnableCPULoadSampling ? R.string.switch_on_text : R.string.switch_off_text));
+                systemMonitorCPUTempSwitch.setChecked(systemMonitorEnableCPUTemperatureSampling);
+                systemMonitorCPUTempSwitch.setSummary(context.getString(systemMonitorEnableCPUTemperatureSampling ? R.string.switch_on_text : R.string.switch_off_text));
             }
         });
+
+        // Ensure the switch is accordingly configured with the connector state.
+        if (connector.isConnected() != switchCc.isChecked()) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    updateSwitchCc(connector.isConnected());
+                }
+            });
+        }
     }
 }

@@ -18,6 +18,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/header_category_system">
 
+    <!-- Cloud Connector -->
+    <com.android.settings.widget.MasterSwitchPreference
+        android:fragment="com.android.settings.cloudconnector.CloudConnectorSettings"
+        android:key="toggle_cloud_connector"
+        android:title="@string/cc_settings_title"
+        android:summary="@string/summary_placeholder"
+        android:icon="@drawable/ic_settings_cloud_connector"
+        android:order="-300">
+        <intent
+            android:action="android.settings.CLOUD_CONNECTOR_SETTINGS"
+            android:targetClass="Settings$CloudConnectorSettingsActivity"/>
+    </com.android.settings.widget.MasterSwitchPreference>
+
     <!-- Backup -->
     <Preference
         android:key="backup_settings"
@@ -27,14 +40,6 @@
         android:order="-60">
         <intent android:action="android.settings.BACKUP_AND_RESET_SETTINGS" />
     </Preference>
-
-    <Preference
-        android:key="cloud_connector_settings"
-        android:title="@string/cc_settings_title"
-        android:summary="@string/summary_placeholder"
-        android:icon="@drawable/ic_settings_cloud_connector"
-        android:order="-29"
-        android:fragment="com.android.settings.cloudconnector.CloudConnectorSettings"/>
 
     <!-- System updates -->
     <Preference

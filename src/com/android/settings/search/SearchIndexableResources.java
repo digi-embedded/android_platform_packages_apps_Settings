@@ -38,6 +38,7 @@ import com.android.settings.applications.AdvancedAppSettings;
 import com.android.settings.applications.AppAndNotificationDashboardFragment;
 import com.android.settings.applications.SpecialAccessSettings;
 import com.android.settings.applications.assist.ManageAssist;
+import com.android.settings.cloudconnector.CloudConnectorSettings;
 import com.android.settings.backup.BackupSettingsActivity;
 import com.android.settings.backup.BackupSettingsFragment;
 import com.android.settings.bluetooth.BluetoothSettings;
@@ -181,6 +182,7 @@ public final class SearchIndexableResources {
         addIndex(AvailableVirtualKeyboardFragment.class,
                 NO_DATA_RES_ID, R.drawable.ic_settings_language);
         addIndex(PhysicalKeyboardFragment.class, NO_DATA_RES_ID, R.drawable.ic_settings_language);
+        addIndex(CloudConnectorSettings.class, NO_DATA_RES_ID, R.drawable.ic_settings_cloud_connector);
         addIndex(BackupSettingsActivity.class, NO_DATA_RES_ID, R.drawable.ic_settings_backup);
         addIndex(BackupSettingsFragment.class, NO_DATA_RES_ID, R.drawable.ic_settings_backup);
         addIndex(DateTimeSettings.class, NO_DATA_RES_ID, R.drawable.ic_settings_date_time);

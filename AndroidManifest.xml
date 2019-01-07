@@ -152,6 +152,39 @@
             </intent-filter>
         </activity>
 
+        <!-- Cloud Connector controls -->
+        <activity android:name="Settings$CloudConnectorSettingsActivity"
+                android:taskAffinity=""
+                android:label="@string/cc_settings"
+                android:icon="@drawable/ic_settings_cloud_connector"
+                android:configChanges="orientation|keyboardHidden|screenSize">
+            <intent-filter android:priority="1">
+                <action android:name="android.settings.CLOUD_CONNECTOR_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.VOICE_LAUNCH" />
+                <category android:name="com.android.settings.SHORTCUT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.cloudconnector.CloudConnectorSettings" />
+            <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
+                android:value="true" />
+        </activity>
+
+        <activity-alias android:name=".cloudconnector.CloudConnectorSettings"
+                android:taskAffinity="com.android.settings"
+                android:label="@string/cc_settings"
+                android:icon="@drawable/ic_settings_cloud_connector"
+                android:targetActivity="Settings$CloudConnectorSettingsActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:exported="true">
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.cloudconnector.CloudConnectorSettings" />
+        </activity-alias>
+
         <!-- Ethernet controls -->
         <activity android:name="Settings$EthernetSettingsActivity"
                 android:taskAffinity=""
