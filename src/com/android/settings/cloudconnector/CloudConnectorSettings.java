@@ -74,6 +74,9 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
 
     private final static String ERROR_INVALID_VENDOR_ID = "Vendor ID is invalid, it must follow this format: 0x01234567";
     private final static String ERROR_INVALID_DEVICE_NAME = "Device name cannot be empty";
+    private final static String ERROR_INVALID_STRING_LENGTH = "Device %s is invalid, it must be between %d and %d characters";
+    private final static String ERROR_INVALID_SYSTEM_MONITOR_SAMPLE_RATE = "Sample rate must be equal or greater than " + CloudConnectorPreferencesManager.MINIMUM_SAMPLE_RATE + " seconds";
+    private final static String ERROR_INVALID_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE = "The number of samples to store before uploading must be greater than 0 and lower than " + CloudConnectorPreferencesManager.MAXIMUM_UPLOAD_SAMPLES_SIZE;
     private final static String ERROR_INVALID_URL = "Invalid URL";
 
     // Variables.
@@ -120,17 +123,26 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
                 ccPrefsManager.setVendorID((String) newValue);
                 break;
             case PREF_DEVICE_NAME:
-                valid = Pattern.matches(DEVICE_NAME_PATTERN , (String) newValue);
-                if (!valid) {
-                    Toast.makeText(context, ERROR_INVALID_DEVICE_NAME, Toast.LENGTH_LONG).show();
+                String name = (String) newValue;
+                valid = Pattern.matches(DEVICE_NAME_PATTERN , name);
+                if (!valid || name.length() > CloudConnectorPreferencesManager.DEVICE_NAME_MAXIMUM_LENGTH || name.trim().length() == 0) {
+                    Toast.makeText(context, String.format(ERROR_INVALID_STRING_LENGTH, "name", 1, CloudConnectorPreferencesManager.DEVICE_NAME_MAXIMUM_LENGTH), Toast.LENGTH_LONG).show();
                     return false;
                 }
-                ccPrefsManager.setDeviceName((String) newValue);
+                ccPrefsManager.setDeviceName(name);
                 break;
             case PREF_DESCRIPTION:
+                if (((String) newValue).length() > CloudConnectorPreferencesManager.DESCRIPTION_MAXIMUM_LENGTH) {
+                    Toast.makeText(context, String.format(ERROR_INVALID_STRING_LENGTH, "description", 1, CloudConnectorPreferencesManager.DESCRIPTION_MAXIMUM_LENGTH), Toast.LENGTH_LONG).show();
+                    return false;
+                }
                 ccPrefsManager.setDeviceDescription((String) newValue);
                 break;
             case PREF_CONTACT:
+                if (((String) newValue).length() > CloudConnectorPreferencesManager.CONTACT_MAXIMUM_LENGTH) {
+                    Toast.makeText(context, String.format(ERROR_INVALID_STRING_LENGTH, "contact", 1, CloudConnectorPreferencesManager.CONTACT_MAXIMUM_LENGTH), Toast.LENGTH_LONG).show();
+                    return false;
+                }
                 ccPrefsManager.setDeviceContactInformation((String) newValue);
                 break;
             case PREF_URL:
@@ -156,20 +168,24 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
             case PREF_SYSTEM_MONITOR_SAMPLE_RATE:
                 try {
                     int sampleRate = Integer.parseInt((String) newValue);
-                    if (sampleRate > 0) {
-                        ccPrefsManager.setSystemMonitorSampleRate(sampleRate);
-                        break;
+                    if (sampleRate < CloudConnectorPreferencesManager.MINIMUM_SAMPLE_RATE) {
+                        Toast.makeText(context, ERROR_INVALID_SYSTEM_MONITOR_SAMPLE_RATE, Toast.LENGTH_LONG).show();
+                        return false;
                     }
+                    ccPrefsManager.setSystemMonitorSampleRate(sampleRate);
+                    break;
                 } catch (Exception e) { }
                 Toast.makeText(context, CloudConnectorHandler.ERROR_INVALID_SYSTEM_MONITOR_SAMPLE_RATE, Toast.LENGTH_LONG).show();
                 return false;
             case PREF_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE:
                 try {
                     int uploadSize = Integer.parseInt((String) newValue);
-                    if (uploadSize > 0 && uploadSize <= CloudConnectorPreferencesManager.MAXIMUM_UPLOAD_SAMPLES_SIZE) {
-                        ccPrefsManager.setSystemMonitorUploadSamplesSize(uploadSize);
-                        break;
+                    if (uploadSize <= 0 || uploadSize > CloudConnectorPreferencesManager.MAXIMUM_UPLOAD_SAMPLES_SIZE) {
+                        Toast.makeText(context, ERROR_INVALID_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE, Toast.LENGTH_LONG).show();
+                        return false;
                     }
+                    ccPrefsManager.setSystemMonitorUploadSamplesSize(uploadSize);
+                    break;
                 } catch (Exception e) { }
                 Toast.makeText(context, CloudConnectorHandler.ERROR_INVALID_SYSTEM_MONITOR_UPLOAD_SAMPLES_SIZE, Toast.LENGTH_LONG).show();
                 return false;
