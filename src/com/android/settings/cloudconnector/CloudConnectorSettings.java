@@ -155,6 +155,7 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
                 break;
             case PREF_ENABLE_AUTO_CONNECT:
                 ccPrefsManager.setAutoConnectEnabled(((Boolean) newValue).booleanValue());
+                ccPrefsManager.setReconnectEnabled(((Boolean) newValue).booleanValue());
                 break;
             case PREF_ENABLE_SECURE_CONNECTION:
                 ccPrefsManager.setSecureConnectionEnabled(((Boolean) newValue).booleanValue());
@@ -388,7 +389,7 @@ public class CloudConnectorSettings extends SettingsPreferenceFragment
         final String url = ccPrefsManager.getURL();
         final String systemMonitorSampleRate = "" + ccPrefsManager.getSystemMonitorSampleRate();
         final String systemMonitorUploadSamplesSize = "" + ccPrefsManager.getSystemMonitorUploadSamplesSize();
-        final boolean autoConnect = ccPrefsManager.isAutoConnectEnabled();
+        final boolean autoConnect = ccPrefsManager.isAutoConnectEnabled() && ccPrefsManager.isReconnectEnabled();
         final boolean secureConnection = ccPrefsManager.isSecureConnectionEnabled();
         final boolean compression = ccPrefsManager.isCompressionEnabled();
         final boolean enableSystemMonitor = ccPrefsManager.isSystemMonitorEnabled();
