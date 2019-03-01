@@ -32,6 +32,7 @@ import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.dashboard.SummaryLoader;
+import com.android.settings.ethernet.EthernetMasterSwitchPreferenceController;
 import com.android.settings.network.MobilePlanPreferenceController.MobilePlanPreferenceHost;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.wifi.WifiMasterSwitchPreferenceController;
@@ -89,6 +90,8 @@ public class NetworkDashboardFragment extends DashboardFragment implements
                 new MobilePlanPreferenceController(context, mobilePlanHost);
         final WifiMasterSwitchPreferenceController wifiPreferenceController =
                 new WifiMasterSwitchPreferenceController(context, metricsFeatureProvider);
+        final EthernetMasterSwitchPreferenceController ethernetPreferenceController =
+                new EthernetMasterSwitchPreferenceController(context, metricsFeatureProvider);
         final MobileNetworkPreferenceController mobileNetworkPreferenceController =
                 new MobileNetworkPreferenceController(context);
         final VpnPreferenceController vpnPreferenceController =
@@ -99,6 +102,7 @@ public class NetworkDashboardFragment extends DashboardFragment implements
         if (lifecycle != null) {
             lifecycle.addObserver(mobilePlanPreferenceController);
             lifecycle.addObserver(wifiPreferenceController);
+            lifecycle.addObserver(ethernetPreferenceController);
             lifecycle.addObserver(mobileNetworkPreferenceController);
             lifecycle.addObserver(vpnPreferenceController);
             lifecycle.addObserver(privateDnsPreferenceController);
@@ -111,6 +115,7 @@ public class NetworkDashboardFragment extends DashboardFragment implements
         controllers.add(new ProxyPreferenceController(context));
         controllers.add(mobilePlanPreferenceController);
         controllers.add(wifiPreferenceController);
+        controllers.add(ethernetPreferenceController);
         controllers.add(privateDnsPreferenceController);
         return controllers;
     }
@@ -229,6 +234,7 @@ public class NetworkDashboardFragment extends DashboardFragment implements
                     List<String> keys = super.getNonIndexableKeys(context);
                     // Remove master switch as a result
                     keys.add(WifiMasterSwitchPreferenceController.KEY_TOGGLE_WIFI);
+                    keys.add(EthernetMasterSwitchPreferenceController.KEY_TOGGLE_ETHERNET);
                     return keys;
                 }
             };

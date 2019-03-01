@@ -63,6 +63,7 @@ import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.core.gateway.SettingsGateway;
 import com.android.settings.dashboard.DashboardFeatureProvider;
 import com.android.settings.dashboard.DashboardSummary;
+import com.android.settings.ethernet.EthernetSettings;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.search.DeviceIndexFeatureProvider;
 import com.android.settings.wfd.WifiDisplaySettings;
@@ -655,6 +656,11 @@ public class SettingsActivity extends SettingsDrawerActivity
                         Settings.ConnectedDeviceDashboardActivity.class.getName()),
                 !UserManager.isDeviceInDemoMode(this) /* enabled */,
                 isAdmin) || somethingChanged;
+
+        somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
+                        Settings.EthernetSettingsActivity.class.getName()),
+                pm.hasSystemFeature(PackageManager.FEATURE_ETHERNET), isAdmin)
+                || somethingChanged;
 
         somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
                         Settings.SimSettingsActivity.class.getName()),

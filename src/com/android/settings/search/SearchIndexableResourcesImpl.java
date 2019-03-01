@@ -51,6 +51,7 @@ import com.android.settings.display.NightDisplaySettings;
 import com.android.settings.display.ScreenZoomSettings;
 import com.android.settings.dream.DreamSettings;
 import com.android.settings.enterprise.EnterprisePrivacySettings;
+import com.android.settings.ethernet.EthernetSettings;
 import com.android.settings.fuelgauge.PowerUsageAdvanced;
 import com.android.settings.fuelgauge.batterysaver.BatterySaverSettings;
 import com.android.settings.fuelgauge.PowerUsageSummary;
@@ -114,6 +115,7 @@ public class SearchIndexableResourcesImpl implements SearchIndexableResources {
 
     public SearchIndexableResourcesImpl() {
         addIndex(WifiSettings.class);
+        addIndex(EthernetSettings.class);
         addIndex(NetworkDashboardFragment.class);
         addIndex(ConfigureWifiSettings.class);
         addIndex(SimSettings.class);
