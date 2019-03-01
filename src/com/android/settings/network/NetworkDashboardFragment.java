@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
+import com.android.settings.ethernet.EthernetMasterSwitchPreferenceController;
 import com.android.settings.network.MobilePlanPreferenceController.MobilePlanPreferenceHost;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.wifi.WifiMasterSwitchPreferenceController;
@@ -98,7 +99,8 @@ public class NetworkDashboardFragment extends DashboardFragment implements
                 new MobilePlanPreferenceController(context, mobilePlanHost);
         final WifiMasterSwitchPreferenceController wifiPreferenceController =
                 new WifiMasterSwitchPreferenceController(context, metricsFeatureProvider);
-
+        final EthernetMasterSwitchPreferenceController ethernetPreferenceController =
+                new EthernetMasterSwitchPreferenceController(context, metricsFeatureProvider);
         final VpnPreferenceController vpnPreferenceController =
                 new VpnPreferenceController(context);
         final PrivateDnsPreferenceController privateDnsPreferenceController =
@@ -107,6 +109,7 @@ public class NetworkDashboardFragment extends DashboardFragment implements
         if (lifecycle != null) {
             lifecycle.addObserver(mobilePlanPreferenceController);
             lifecycle.addObserver(wifiPreferenceController);
+            lifecycle.addObserver(ethernetPreferenceController);
             lifecycle.addObserver(vpnPreferenceController);
             lifecycle.addObserver(privateDnsPreferenceController);
         }
@@ -119,6 +122,7 @@ public class NetworkDashboardFragment extends DashboardFragment implements
         controllers.add(new ProxyPreferenceController(context));
         controllers.add(mobilePlanPreferenceController);
         controllers.add(wifiPreferenceController);
+        controllers.add(ethernetPreferenceController);
         controllers.add(privateDnsPreferenceController);
         return controllers;
     }
