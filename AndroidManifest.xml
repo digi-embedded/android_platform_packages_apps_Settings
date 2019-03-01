@@ -109,6 +109,11 @@
             android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
 
         <uses-library android:name="org.apache.http.legacy" />
+
+        <uses-library
+            android:name="com.digi.android"
+            android:required="true"/>
+
         <!-- Settings -->
 
         <activity android:name="Settings"
