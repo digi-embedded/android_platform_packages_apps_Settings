@@ -20,6 +20,9 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settings.R;
 import com.android.settings.SettingsActivity;
 import com.android.settings.SettingsPreferenceFragment;
+import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settings.search.Indexable;
+import com.android.settings.search.SearchIndexableRaw;
 import com.android.settings.widget.SwitchBar;
 
 import android.app.ProgressDialog;
@@ -27,6 +30,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.os.Bundle;
@@ -41,14 +45,20 @@ import android.widget.Toast;
 import com.digi.android.ethernet.EthernetManager;
 import com.digi.android.ethernet.EthernetConnectionMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Main fragment of the Ethernet settings preference page.
  */
 public class EthernetSettings extends SettingsPreferenceFragment
-		implements SwitchBar.OnSwitchChangeListener {
+		implements Indexable, SwitchBar.OnSwitchChangeListener {
 
 	// Constants.
 	public static final String UPDATE_NETWORK_DATA = "com.digi.android.network.update";
+
+	// For Search
+	public static final String DATA_KEY_REFERENCE = "main_toggle_ethernet";
 
 	private static final String TAG = "EthernetSetting";
 
@@ -314,4 +324,25 @@ public class EthernetSettings extends SettingsPreferenceFragment
 			}
 		}).start();
 	}
+
+	public static final SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+		new BaseSearchIndexProvider() {
+			@Override
+			public List<SearchIndexableRaw> getRawDataToIndex(Context context, boolean enabled) {
+				final List<SearchIndexableRaw> result = new ArrayList<>();
+				final Resources res = context.getResources();
+
+				// Add fragment title if we are showing this fragment
+				if (res.getBoolean(R.bool.config_show_ethernet_settings)) {
+					SearchIndexableRaw data = new SearchIndexableRaw(context);
+					data.title = res.getString(R.string.ethernet_settings);
+					data.screenTitle = res.getString(R.string.ethernet_settings);
+					data.keywords = res.getString(R.string.keywords_ethernet);
+					data.key = DATA_KEY_REFERENCE;
+					result.add(data);
+				}
+
+				return result;
+			}
+		};
 }
