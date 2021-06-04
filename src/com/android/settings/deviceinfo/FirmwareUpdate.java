@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.android.settings.R;
 
 import com.digi.android.firmwareupdate.FirmwareUpdateManager;
+import com.digi.android.firmwareupdate.FirmwareUpdaterStatus;
 import com.digi.android.firmwareupdate.IFirmwareUpdateListener;
 
 import java.io.File;
@@ -76,46 +77,24 @@ public class FirmwareUpdate extends Activity {
     private IFirmwareUpdateListener firmwareUpdateListener = new IFirmwareUpdateListener() {
 
         @Override
-        public void verifyStarted() {
-            // Do nothing.
-        }
-
-        @Override
-        public void verifyProgress(int progress) {
-            // Update dialog message.
-            handler.sendMessage(handler.obtainMessage(ACTION_UPDATE_PROGRESS_DIALOG_TEXT,
-                    String.format(getResources().getString(R.string.verifying_update_package), progress)));
-        }
-
-        @Override
-        public void verifyFinished() {
-            // Do nothing.
-        }
-
-        @Override
-        public void updateStarted() {
+        public void statusUpdate(FirmwareUpdaterStatus status, String details) {
             // Dismiss the progress dialog.
+            // TODO: FIX THIS!
+            /*
             handler.sendEmptyMessage(ACTION_DISMISS_PROGRESS_DIALOG);
-        }
-
-        @Override
-        public void updatePackageCopyStarted() {
-            // Update dialog message.
             handler.sendMessage(handler.obtainMessage(ACTION_UPDATE_PROGRESS_DIALOG_TEXT,
                     getResources().getString(R.string.copying_update_package)));
+            */
         }
 
         @Override
-        public void updatePackageCopyFinished() {
-            // Do nothing.
-        }
-
-        @Override
-        public void onError(String error) {
-            // Dismiss the progress dialog.
-            handler.sendEmptyMessage(ACTION_DISMISS_PROGRESS_DIALOG);
-            // Display an error message.
-            handler.sendMessage(handler.obtainMessage(ACTION_SHOW_TOAST, error));
+        public void onProgress(int progress) {
+            // Update dialog message.
+            // TODO: FIX THIS
+            /*
+            handler.sendMessage(handler.obtainMessage(ACTION_UPDATE_PROGRESS_DIALOG_TEXT,
+                    String.format(getResources().getString(R.string.verifying_update_package), progress)));
+            */
         }
     };
 
@@ -322,6 +301,7 @@ public class FirmwareUpdate extends Activity {
         progressDialog.setMessage(getResources().getString(R.string.installing_firmware_title));
         progressDialog.show();
         // Start firmware update.
-        firmwareUpdateManager.installUpdatePackage(chosenFile.toString(), firmwareUpdateListener, false, null);
+        // TODO: FIX THIS!
+        //firmwareUpdateManager.installUpdatePackage(chosenFile.toString(), firmwareUpdateListener, false, null);
     }
 }
